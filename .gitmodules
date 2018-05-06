@@ -1,0 +1,6 @@
+[submodule "hlsdk"]
+	path = hlsdk
+	url = https://github.com/FWGS/hlsdk-xash3d
+[submodule "metamod"]
+	path = metamod
+	url = https://github.com/theAsmodai/metamod-r.git
