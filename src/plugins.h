@@ -1,3 +1,4 @@
+#pragma once
 #include "luai.h"
 #include <vector>
 

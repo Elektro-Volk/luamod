@@ -1,23 +1,45 @@
-CC=g++ -g -m32
-CFLAGS=-std=c++11 -c -fPIC -m32
-LDFLAGS=-Wl,-rpath,. -shared -m32 -L./lua -llua
-INCLUDES=-I./src -I./hlsdk/dlls -I./hlsdk/common -I./hlsdk/engine -I./metamod/metamod/src -I./
-SOURCES=	\
-	src/main.cpp \
-	src/plugins.cpp \
-	src/luamod.cpp \
-	src/luaapi.cpp \
-	src/lua_functions.cpp
-OBJECTS=$(SOURCES:.cpp=.o)
-EXECUTABLE=LuaMod
+HLSDK = include/hlsdk
+METAMOD = include/metamod
 
-all: $(SOURCES) $(EXECUTABLE)
+NAME = luamod
 
-$(EXECUTABLE): $(OBJECTS)
-	$(CC) $(OBJECTS) $(LDFLAGS) -o lib$(EXECUTABLE).so
-	ar rc lib$(EXECUTABLE).a $(OBJECTS)
-	ranlib lib$(EXECUTABLE).a
-.cpp.o:
-	$(CC) $(CFLAGS) $(INCLUDES) $< -o $@
+COMPILER = g++
+
+OBJECTS = src/*.cpp
+
+LINK =-L./lua -llua
+
+OPT_FLAGS = -O3 -msse3 -flto -funroll-loops -fomit-frame-pointer -fno-stack-protector -fPIC -m32
+
+INCLUDE = -I. -I$(HLSDK)/common -I$(HLSDK)/dlls -I$(HLSDK)/engine \
+		-I$(HLSDK)/game_shared -I$(HLSDK)/pm_shared -I$(HLSDK)/public -I$(METAMOD)
+
+BIN_DIR = Release
+CFLAGS = $(OPT_FLAGS)
+
+CFLAGS += -g -DNDEBUG -Dlinux -D__linux__ -D__USE_GNU -std=gnu++11 -shared
+
+OBJ_LINUX := $(OBJECTS:%.c=$(BIN_DIR)/%.o)
+
+$(BIN_DIR)/src/%.o: %.c
+	$(COMPILER) $(INCLUDE) $(CFLAGS) -o $@ -c $<
+
+all:
+	mkdir -p $(BIN_DIR)
+
+	$(MAKE) $(NAME) && strip -x $(BIN_DIR)/$(NAME)_mm_i386.so
+
+$(NAME): $(OBJ_LINUX)
+	$(COMPILER) $(INCLUDE) $(CFLAGS) $(OBJ_LINUX) $(LINK) -o$(BIN_DIR)/$(NAME)_mm_i386.so
+
+check:
+	cppcheck $(INCLUDE) --quiet --max-configs=100 -D__linux__ -DNDEBUG .
+
+debug:
+	$(MAKE) all DEBUG=false
+
+default: all
+
 clean:
-	rm -rf $(OBJECTS) $(EXECUTABLE)
+	rm -rf Release/*.o
+	rm -rf Release/$(NAME)_mm_i386.so
