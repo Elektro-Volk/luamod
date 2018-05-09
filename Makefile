@@ -5,13 +5,13 @@ NAME = luamod
 
 COMPILER = g++
 
-OBJECTS = src/*.cpp
+OBJECTS = src/*.cpp src/lua/*.cpp
 
 LINK =-L./lua -llua
 
 OPT_FLAGS = -O3 -msse3 -flto -funroll-loops -fomit-frame-pointer -fno-stack-protector -fPIC -m32
 
-INCLUDE = -I. -I$(HLSDK)/common -I$(HLSDK)/dlls -I$(HLSDK)/engine \
+INCLUDE = -I. -I./src -I$(HLSDK)/common -I$(HLSDK)/dlls -I$(HLSDK)/engine \
 		-I$(HLSDK)/game_shared -I$(HLSDK)/pm_shared -I$(HLSDK)/public -I$(METAMOD)
 
 BIN_DIR = Release

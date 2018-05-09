@@ -5,7 +5,7 @@
 
 std::vector<Plugin*> luaPlugins::plugins;
 
-extern void loadLuaApi(lua_State *state);
+extern void loadLuaApi(lua_State *L);
 
 bool Plugin::load(const char* path)
 {

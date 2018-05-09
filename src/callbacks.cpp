@@ -1,5 +1,6 @@
 #include "callbacks.h"
 #include "events.h"
+#include "lua/lc_edict.h"
 
 Event *eventClientPutInServer = addEvent("engine_client_connected");
 void pfnClientPutInServer(edict_t* ed)
@@ -8,7 +9,8 @@ void pfnClientPutInServer(edict_t* ed)
   auto states = eventClientPutInServer->states;
   for (int i = 0; i < states.size(); i++) {
     lua_getfield(states[i], LUA_REGISTRYINDEX, "engine_client_connected");
-    lua_pcall(states[i], 0, 0, 0);
+    lc_edict::push_edict(states[i], ed);
+    lua_pcall(states[i], 1, 0, 0);
   }
   //RETURN_META_VALUE(MRES_IGNORED, 0);
 }
@@ -20,7 +22,8 @@ void pfnClientCommand(edict_t* ed)
   auto states = eventClientCommand->states;
   for (int i = 0; i < states.size(); i++) {
     lua_getfield(states[i], LUA_REGISTRYINDEX, "engine_client_command");
-    lua_pcall(states[i], 0, 0, 0);
+    lc_edict::push_edict(states[i], ed);
+    lua_pcall(states[i], 1, 0, 0);
   }
   //RETURN_META_VALUE(MRES_IGNORED, 0);
 }
