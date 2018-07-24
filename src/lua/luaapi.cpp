@@ -1,18 +1,17 @@
 #include <extdll.h>
 #include <meta_api.h>
-#include "plugins.h"
-#include "lc_edict.h"
-#include "lu_output.h"
+#include "luai.h"
+#include "lu_offset.h"
+#include "lu_engfuncs.hpp"
 
 int lPrint (lua_State *L);
-int lLoad (lua_State *L);
-int lSubscribe (lua_State *L);
 void loadLuaApi(lua_State *L)
 {
+    lua_createtable(L, 0, 1);
+    lua_setglobal(L, "engine_events");
+
     luaL_openlibs(L);
-    lc_edict::init_api(L);
-    lu_output::init_api(L);
+    lu_offset::init_api(L);
+    lu_engfuncs::init_api(L);
     lua_register(L, "print", lPrint);
-    lua_register(L, "load", lLoad);
-    lua_register(L, "subscribe", lSubscribe);
 }

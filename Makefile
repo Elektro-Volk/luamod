@@ -5,7 +5,20 @@ NAME = luamod
 
 COMPILER = g++
 
-OBJECTS = src/*.cpp src/lua/*.cpp
+OBJECTS = \
+src/public.cpp \
+src/callbacks.cpp \
+src/dllapi.cpp \
+src/engine_api.cpp \
+src/ex_rehlds_api.cpp \
+src/h_export.cpp \
+src/lua_functions.cpp \
+src/meta_api.cpp \
+src/lua/CLuaWorker.cpp \
+src/lua/commands.cpp \
+src/lua/lu_offset.cpp \
+src/lua/lu_engfuncs.cpp \
+src/lua/luaapi.cpp
 
 LINK =-L./lua -llua
 

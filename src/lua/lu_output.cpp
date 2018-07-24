@@ -1,4 +1,3 @@
-#include "lc_edict.h"
 #include "lu_output.h"
 
 void lu_output::init_api(lua_State *L)
