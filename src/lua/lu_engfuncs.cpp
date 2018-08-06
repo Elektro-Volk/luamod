@@ -2,6 +2,7 @@
 #include <extdll.h>
 #include <meta_api.h>
 #include "ex_rehlds_api.h"
+#include <vector>
 
 /*
 void		(*pfnMessageBegin)			(int msg_dest, int msg_type, const float *pOrigin, edict_t *ed);
@@ -16,6 +17,15 @@ void		(*pfnWriteString)			(const char *sz);
 void		(*pfnWriteEntity)			(int iValue);
 */
 
+/*
+void		(*pfnCVarRegister)			(cvar_t *pCvar);
+float		(*pfnCVarGetFloat)			(const char *szVarName);
+const char*	(*pfnCVarGetString)			(const char *szVarName);
+void		(*pfnCVarSetFloat)			(const char *szVarName, float flValue);
+void		(*pfnCVarSetString)			(const char *szVarName, const char *szValue);
+cvar_t		(*pfnCVarGetPointer)			(const char *szVarName);
+*/
+
 void lu_engfuncs::init_api(lua_State *L)
 {
   lua_register(L, "message_begin", l_pfnMessageBegin);
@@ -28,6 +38,12 @@ void lu_engfuncs::init_api(lua_State *L)
   lua_register(L, "write_coord", l_pfnWriteCoord);
   lua_register(L, "write_string", l_pfnWriteString);
   lua_register(L, "write_entity", l_pfnWriteEntity);
+  //Квары
+  lua_register(L, "cvar_get_float", l_pfnCVarGetFloat);
+  lua_register(L, "cvar_get_string", l_pfnCVarGetString);
+  lua_register(L, "cvar_set_float", l_pfnCVarSetFloat);
+  lua_register(L, "cvar_set_string", l_pfnCVarSetString);
+  lua_register(L, "cvar_register", lu_engfuncs::l_pfnRegister_Cvar);
 }
 
 int lu_engfuncs::l_pfnMessageBegin(lua_State *L)
@@ -105,4 +121,35 @@ int lu_engfuncs::l_pfnWriteEntity(lua_State *L)
 {
     WRITE_ENTITY(luaL_checkinteger(L, 1));
     return 0;
+}
+
+int lu_engfuncs::l_pfnCVarGetFloat(lua_State *L)
+{
+	lua_pushnumber(L, CVAR_GET_FLOAT(luaL_checkstring(L, 1)));
+	return 1;
+}
+
+int lu_engfuncs::l_pfnCVarGetString(lua_State *L)
+{
+	lua_pushstring(L, CVAR_GET_STRING(luaL_checkstring(L, 1)));
+	return 1;
+}
+
+int lu_engfuncs::l_pfnCVarSetFloat(lua_State *L)
+{
+	CVAR_SET_FLOAT(luaL_checkstring(L, 1), luaL_checknumber(L, 2));
+	return 1;
+}
+
+int lu_engfuncs::l_pfnCVarSetString(lua_State *L)
+{
+	CVAR_SET_STRING(luaL_checkstring(L, 1), luaL_checkstring(L, 2));
+	return 1;
+}
+
+int lu_engfuncs::l_pfnRegister_Cvar(lua_State *L)
+{
+        cvar_t cvar_lua_mod = { luaL_checkstring(L, 1), (char*)luaL_checkstring(L, 2) };
+        CVAR_REGISTER(&cvar_lua_mod);
+        return 0;
 }

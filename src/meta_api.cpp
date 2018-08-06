@@ -2,6 +2,7 @@
 #include <meta_api.h>
 #include "ex_rehlds_api.h"
 #include "lua/CLuaWorker.hpp"
+#define LUAMOD_VERSION "0.1"
 
 meta_globals_t *gpMetaGlobals;
 gamedll_funcs_t *gpGamedllFuncs;
@@ -12,7 +13,7 @@ plugin_info_t Plugin_info =
 {
 	META_INTERFACE_VERSION,			// ifvers
 	"LuaMod",				// name
-	"0.1",							// version
+	LUAMOD_VERSION,							// version
 	__DATE__,						// date
 	"TheEVolk",						// author
 	"https://github.com/Elektro-Volk/luamod",						// url
