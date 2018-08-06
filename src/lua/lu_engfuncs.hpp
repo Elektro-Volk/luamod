@@ -3,6 +3,10 @@
 
 namespace lu_engfuncs {
     void init_api(lua_State *L);
+	int l_pfnPrecacheModel(lua_State *L);
+	int l_pfnPrecacheSound(lua_State *L);
+	int l_pfnPrecacheGeneric(lua_State *L);
+	//
     int l_pfnMessageBegin(lua_State *L);
     int l_pfnMessageEnd(lua_State *L);
     int l_pfnWriteByte(lua_State *L);
@@ -13,9 +17,11 @@ namespace lu_engfuncs {
     int l_pfnWriteCoord(lua_State *L);
     int l_pfnWriteString(lua_State *L);
     int l_pfnWriteEntity(lua_State *L);
+	//
+	int l_pfnRegister_Cvar(lua_State *L);
 	int l_pfnCVarGetFloat(lua_State *L);
 	int	l_pfnCVarGetString(lua_State *L);
 	int l_pfnCVarSetFloat(lua_State *L);
 	int l_pfnCVarSetString(lua_State *L);
-	int l_pfnRegister_Cvar(lua_State *L);
+
 }

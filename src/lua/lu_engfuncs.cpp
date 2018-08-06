@@ -5,6 +5,12 @@
 #include <vector>
 
 /*
+int			(*pfnPrecacheModel)			(char* s);
+int			(*pfnPrecacheSound)			(char* s);
+int			(*pfnPrecacheGeneric)		(char* s);
+*/
+
+/*
 void		(*pfnMessageBegin)			(int msg_dest, int msg_type, const float *pOrigin, edict_t *ed);
 void		(*pfnMessageEnd)			(void);
 void		(*pfnWriteByte)				(int iValue);
@@ -23,11 +29,15 @@ float		(*pfnCVarGetFloat)			(const char *szVarName);
 const char*	(*pfnCVarGetString)			(const char *szVarName);
 void		(*pfnCVarSetFloat)			(const char *szVarName, float flValue);
 void		(*pfnCVarSetString)			(const char *szVarName, const char *szValue);
-cvar_t		(*pfnCVarGetPointer)			(const char *szVarName);
+cvar_t		(*pfnCVarGetPointer)		(const char *szVarName);
 */
 
 void lu_engfuncs::init_api(lua_State *L)
 {
+  lua_register(L, "precache_model", l_pfnPrecacheModel);
+  lua_register(L, "precache_sound", l_pfnPrecacheSound);
+  lua_register(L, "precache_generic", l_pfnPrecacheGeneric);
+  //
   lua_register(L, "message_begin", l_pfnMessageBegin);
   lua_register(L, "message_end", l_pfnMessageEnd);
   lua_register(L, "write_byte", l_pfnWriteByte);
@@ -38,12 +48,30 @@ void lu_engfuncs::init_api(lua_State *L)
   lua_register(L, "write_coord", l_pfnWriteCoord);
   lua_register(L, "write_string", l_pfnWriteString);
   lua_register(L, "write_entity", l_pfnWriteEntity);
-  //Квары
+  //
+  lua_register(L, "cvar_register", l_pfnRegister_Cvar);
   lua_register(L, "cvar_get_float", l_pfnCVarGetFloat);
   lua_register(L, "cvar_get_string", l_pfnCVarGetString);
   lua_register(L, "cvar_set_float", l_pfnCVarSetFloat);
   lua_register(L, "cvar_set_string", l_pfnCVarSetString);
-  lua_register(L, "cvar_register", lu_engfuncs::l_pfnRegister_Cvar);
+}
+
+int lu_engfuncs::l_pfnPrecacheModel(lua_State *L)
+{
+	PRECACHE_MODEL(luaL_checkstring(L, 1));
+	return 1;
+}
+
+int lu_engfuncs::l_pfnPrecacheSound(lua_State *L)
+{
+	PRECACHE_SOUND(luaL_checkstring(L, 1));
+	return 1;
+}
+
+int lu_engfuncs::l_pfnPrecacheGeneric(lua_State *L)
+{
+	PRECACHE_GENERIC(luaL_checkstring(L, 1));
+	return 1;
 }
 
 int lu_engfuncs::l_pfnMessageBegin(lua_State *L)
@@ -123,6 +151,13 @@ int lu_engfuncs::l_pfnWriteEntity(lua_State *L)
     return 0;
 }
 
+int lu_engfuncs::l_pfnRegister_Cvar(lua_State *L)
+{
+        cvar_t cvar_lua_mod = { luaL_checkstring(L, 1), (char*)luaL_checkstring(L, 2) };
+        CVAR_REGISTER(&cvar_lua_mod);
+        return 0;
+}
+
 int lu_engfuncs::l_pfnCVarGetFloat(lua_State *L)
 {
 	lua_pushnumber(L, CVAR_GET_FLOAT(luaL_checkstring(L, 1)));
@@ -145,11 +180,4 @@ int lu_engfuncs::l_pfnCVarSetString(lua_State *L)
 {
 	CVAR_SET_STRING(luaL_checkstring(L, 1), luaL_checkstring(L, 2));
 	return 1;
-}
-
-int lu_engfuncs::l_pfnRegister_Cvar(lua_State *L)
-{
-        cvar_t cvar_lua_mod = { luaL_checkstring(L, 1), (char*)luaL_checkstring(L, 2) };
-        CVAR_REGISTER(&cvar_lua_mod);
-        return 0;
 }
