@@ -5,7 +5,12 @@
 
 namespace lu_offset {
   void init_api(lua_State *L);
+
   int l_get_offset_data(lua_State *L);
+  int l_get_offset_int(lua_State *L);
+  int l_get_offset_uint(lua_State *L);
+  int l_get_offset_ushort(lua_State *L);
+
   int l_set_offset_float(lua_State *L);
   int l_set_offset_integer(lua_State *L);
   int l_set_offset_boolean(lua_State *L);

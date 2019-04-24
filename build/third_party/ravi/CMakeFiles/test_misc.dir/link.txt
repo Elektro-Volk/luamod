@@ -1,0 +1,1 @@
+/usr/bin/cc -std=c99 -DNDEBUG -O2 -fomit-frame-pointer -Wall -Wextra -Winline -DLUA_COMPAT_5_2 -DLUA_COMPAT_5_1 -DLUA_USE_LINUX  -rdynamic CMakeFiles/test_misc.dir/tests/test_misc.c.o  -o test_misc 

@@ -1,0 +1,1 @@
+/usr/bin/c++  -fno-rtti -O2 -fomit-frame-pointer -Wall -Wno-sign-compare -Winline -std=c++11 -fno-exceptions -DLUA_COMPAT_5_2 -DLUA_COMPAT_5_1 -DLUA_USE_LINUX  -rdynamic CMakeFiles/ravi_s.dir/src/lua.c.o  -o ravi_s libravinojit_static.a -lm -ldl -lreadline 

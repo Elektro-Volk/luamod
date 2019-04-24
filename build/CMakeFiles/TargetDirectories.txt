@@ -1,0 +1,6 @@
+/home/xash/luamod/build/CMakeFiles/rebuild_cache.dir
+/home/xash/luamod/build/CMakeFiles/luamod.dir
+/home/xash/luamod/build/CMakeFiles/edit_cache.dir
+/home/xash/luamod/build/third_party/lua/CMakeFiles/rebuild_cache.dir
+/home/xash/luamod/build/third_party/lua/CMakeFiles/lua.dir
+/home/xash/luamod/build/third_party/lua/CMakeFiles/edit_cache.dir
