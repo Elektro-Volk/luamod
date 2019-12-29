@@ -10,6 +10,7 @@ namespace lu_offset {
   int l_get_offset_int(lua_State *L);
   int l_get_offset_uint(lua_State *L);
   int l_get_offset_ushort(lua_State *L);
+  int l_get_offset_float(lua_State *L);
 
   int l_set_offset_float(lua_State *L);
   int l_set_offset_integer(lua_State *L);
